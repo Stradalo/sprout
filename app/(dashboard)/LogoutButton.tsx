@@ -16,6 +16,6 @@ export default function LogoutButton() {
     }
 
     return (
-        <button onClick={signOut}>Log out</button>
+        <button className="mt-auto px-3 py-2 rounded-md text-red-400 hover:bg-red-950 transition-colors" onClick={signOut}>Log out</button>
     );
 }

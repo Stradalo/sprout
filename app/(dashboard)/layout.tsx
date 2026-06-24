@@ -1,5 +1,5 @@
-import Link from "next/link";
 import LogoutButton from "./LogoutButton";
+import Links from "./Links";
 
 export default function Layout({
   children,
@@ -8,12 +8,8 @@ export default function Layout({
 }>) {
     return (
         <div className="flex min-h-screen">
-            <aside className="w-64">
-                <Link href="/">Dashboard</Link>
-                <Link href="/lessons">Lessons</Link>
-                <Link href="/tests">Tests</Link>
-                <Link href="/myresults">My Results</Link>
-                <Link href="/feedback">Feedback</Link>
+            <aside className="flex flex-col p-4 w-64 bg-slate-900">
+                <Links />
                 <LogoutButton />
             </aside>
 
