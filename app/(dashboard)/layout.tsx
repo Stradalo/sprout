@@ -1,6 +1,6 @@
 import LogoutButton from "./LogoutButton";
 import Links from "./Links";
-import createServerClient from "../lib/supabase/server"
+import createServerClient from "@/lib/supabase/server"
 
 export default async function Layout({
   children,

@@ -9,10 +9,10 @@ export default function Links({ role }: { role: string }) {
         { href:"/", label: "Dashboard", role: "all" },
         { href:"/lessons", label: "Lessons", role: "student" },
         { href:"/tests", label: "Tests", role: "student" },
-        { href:"/myresults", label: "My Results", role: "student" },
-        { href:"/managelessons", label: "Manage Lessons", role: "teacher" },
-        { href:"/managetests", label: "Manage Tests", role: "teacher" },
-        { href:"/studentsresults", label: "Students Results", role: "teacher" },
+        { href:"/my-results", label: "My Results", role: "student" },
+        { href:"/manage-lessons", label: "Manage Lessons", role: "teacher" },
+        { href:"/manage-tests", label: "Manage Tests", role: "teacher" },
+        { href:"/students-results", label: "Students Results", role: "teacher" },
     ];
 
     return (
