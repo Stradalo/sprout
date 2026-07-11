@@ -7,9 +7,9 @@ export default function Links({ role }: { role: string }) {
     const pathname = usePathname();
     const navItems = [
         { href:"/", label: "Dashboard", role: "all" },
-        { href:"/lessons", label: "Lessons", role: "student" },
-        { href:"/tests", label: "Tests", role: "student" },
-        { href:"/my-results", label: "My Results", role: "student" },
+        { href:"/lessons", label: "Lessons", role: "all" },
+        { href:"/tests", label: "Tests", role: "all" },
+        { href:"/my-results", label: "My Results", role: "all" },
         { href:"/manage-lessons", label: "Manage Lessons", role: "teacher" },
         { href:"/manage-tests", label: "Manage Tests", role: "teacher" },
         { href:"/students-results", label: "Students Results", role: "teacher" },
@@ -20,7 +20,7 @@ export default function Links({ role }: { role: string }) {
             {navItems.filter(n => n.role === role || n.role === "all").map(n => 
                 <Link 
                     className={`px-3 py-2 rounded-md text-slate-300 hover:bg-slate-800 hover:text-white transition-colors ${
-                        n.href === pathname ? "bg-slate-800 text-white" : ""
+                        n.href === pathname || pathname.startsWith(n.href + '/') ? "bg-slate-800 text-white" : ""
                     }`}
                     key={n.href}
                     href={n.href}
