@@ -21,7 +21,7 @@ export default async function Lessons() {
         .select('*')
         .order('sort_order', { ascending: true })
 
-    const { data: lessons, error:lessonsError } = await supabase
+    const { data: lessons, error: lessonsError } = await supabase
         .from('lessons')
         .select('*')
         .order("created_at", {ascending: true})

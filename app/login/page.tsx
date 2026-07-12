@@ -38,7 +38,7 @@ export default function Login() {
             />
             <button 
                 className="hover:bg-slate-800 bg-slate-900 text-white px-4 py-2 rounded-md" 
-                onClick={handleLogin}
+                onClick={ handleLogin }
             >
                 Войти
             </button>
