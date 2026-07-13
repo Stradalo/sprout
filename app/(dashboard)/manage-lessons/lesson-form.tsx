@@ -1,10 +1,16 @@
 "use client"
 
 import { Module } from "@/lib/types";
+import { useActionState } from "react";
+import { createLesson } from "./action";
 
 export function LessonForm({ modules }: { modules: Module[] }) {
+    const initialState = { message: "" }
+
+    const [state, formAction] = useActionState(createLesson, initialState)
+
     return (
-        <form className="space-y-2 flex flex-col">
+        <form className="space-y-2 flex flex-col" action={formAction}>
             <select name="module_id">
                 <option value="">
                     Без модуля
@@ -53,6 +59,9 @@ export function LessonForm({ modules }: { modules: Module[] }) {
                 type="checkbox"
             />
             <label htmlFor="published">Показать в уроках</label>
+            { state.message && (
+                <p> { state.message } </p>
+            )}
             <button type="submit">Создать урок</button>
         </form>
     )
