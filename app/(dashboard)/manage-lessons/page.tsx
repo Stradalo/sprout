@@ -1,5 +1,6 @@
 import createServerClient from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { LessonForm } from "./lesson-form";
 
 export default async function ManageLessons() {
     const supabase = await createServerClient()
@@ -26,7 +27,7 @@ export default async function ManageLessons() {
 
     const { data: modules, error: moduleErrors } = await supabase
         .from('modules')
-        .select('title, id');
+        .select('*');
 
     if (lessonErrors || moduleErrors) {
         return (
@@ -37,7 +38,7 @@ export default async function ManageLessons() {
     return (
         <div className="space-y-6">
             <ul className="space-y-2">
-                { lessons.length == 0 && (
+                { lessons.length === 0 && (
                     <li>You did not create any lessons</li>
                 )}
 
@@ -47,56 +48,7 @@ export default async function ManageLessons() {
                     </li>
                 )}
             </ul>
-            <form className="space-y-2 flex flex-col" method="post">
-                <select name="module_id">
-                    <option value="">
-                        Без модуля
-                    </option>
-                    {
-                        modules.map(m => 
-                            <option 
-                                value={m.id}
-                                key={m.id}
-                            >
-                                {m.title}
-                            </option>
-                        )
-                    }
-                </select>
-                <input 
-                    className="border border-slate-300 rounded-md px-3 py-2 m-2 bg-black"
-                    placeholder="Напишите имя урока"
-                    name="title"
-                    required
-                    type="text"
-                />
-                <input 
-                    className="border border-slate-300 rounded-md px-3 py-2 m-2 bg-black"
-                    placeholder="Напишите о уроке"
-                    name="description"
-                    type="text"
-                />
-                <input 
-                    className="border border-slate-300 rounded-md px-3 py-2 m-2 bg-black"
-                    placeholder="Напишите урок"
-                    name="content"
-                    type="text"
-                />
-                <input 
-                    className="border border-slate-300 rounded-md px-3 py-2 m-2 bg-black"
-                    placeholder="Вставьте ссылку на урок"
-                    name="youtube_id"
-                    type="text"
-                />
-                <input
-                    className="border border-slate-300 rounded-md px-3 py-2 m-2 bg-black"
-                    name="published"
-                    id="published"
-                    type="checkbox"
-                />
-                <label htmlFor="published">Показать в уроках</label>
-                <button type="submit">Создать урок</button>
-            </form>
+            <LessonForm modules={modules}/>
         </div>
     );
 }
