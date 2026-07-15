@@ -3,11 +3,17 @@ export function extractYoutubeId(url: string | null) {
         return null
     }
 
-    const youtube = new URL(url)
+    let youtube; 
 
-    if (youtube.hostname !== 'youtu.be') {
-        return youtube.searchParams.get('v')
-    } else {
+    try {
+        youtube = new URL(url)
+    } catch {
+        return null
+    }
+
+    if (youtube.hostname === 'youtu.be') {
         return youtube.pathname.slice(1)
     }
+
+    return youtube.searchParams.get('v')
 }
