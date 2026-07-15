@@ -22,3 +22,15 @@ export type Module = {
     created_at: string | null,
     sort_order: number | null
 }
+
+export type LessonFormState = {
+    message: string,
+    values?: {
+        title?: string,
+        module_id?: string,
+        description?: string,
+        content?: string,
+        published?: boolean,
+        youtube_url?: string
+    }
+}
