@@ -10,6 +10,7 @@ export default function Links({ role }: { role: string }) {
         { href:"/lessons", label: "Lessons", role: "all" },
         { href:"/tests", label: "Tests", role: "all" },
         { href:"/my-results", label: "My Results", role: "all" },
+        { href:"/manage-modules", label: "Manage Modules", role: "teacher" },
         { href:"/manage-lessons", label: "Manage Lessons", role: "teacher" },
         { href:"/manage-tests", label: "Manage Tests", role: "teacher" },
         { href:"/students-results", label: "Students Results", role: "teacher" },

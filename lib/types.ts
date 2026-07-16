@@ -34,3 +34,11 @@ export type LessonFormState = {
         youtube_url?: string
     }
 }
+
+export type ModuleFormState = {
+    message: string,
+    values?: {
+        title?: string,
+        sort_order?: number
+    }
+}
