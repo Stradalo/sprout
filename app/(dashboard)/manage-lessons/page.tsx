@@ -1,6 +1,8 @@
 import createServerClient from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { LessonForm } from "./lesson-form";
+import { deleteLesson } from "./action";
+import Link from "next/link";
 
 export default async function ManageLessons() {
     const supabase = await createServerClient()
@@ -45,6 +47,15 @@ export default async function ManageLessons() {
                 { lessons.map(l => 
                     <li key={l.id}>
                         { l.title }
+                        <Link href={`/manage-lessons/${l.id}/edit`}> Изменить урок </Link>
+                        <form className="space-y-2 flex flex-col" action={deleteLesson}>
+                            <input 
+                                type="hidden" 
+                                value={l.id}
+                                name="id"
+                            />
+                            <button type="submit">Удалить урок</button>
+                        </form>
                     </li>
                 )}
             </ul>

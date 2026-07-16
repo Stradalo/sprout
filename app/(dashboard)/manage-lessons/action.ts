@@ -19,7 +19,7 @@ export async function createLesson(prevState: LessonFormState, formData: FormDat
     const title = formData.get("title") as string | null
     const description = formData.get("description") as string | null
     const content = formData.get("content") as string | null
-    const module_id = formData.get("module_id") as string | null
+    const module_id = (formData.get("module_id") as string | null) || null
     const published = formData.get("published") !== null
     const youtube_url = formData.get("youtube_id") as string | null
     const youtube_id = extractYoutubeId(youtube_url)
@@ -43,7 +43,7 @@ export async function createLesson(prevState: LessonFormState, formData: FormDat
         return { message: "Описание не может быть пустым", values }
     }
 
-    if (youtube_url && youtube_id == null) {
+    if (youtube_url && youtube_id === null) {
         return { message: "Неправильный формат ссылки", values }
     }
 
@@ -53,6 +53,84 @@ export async function createLesson(prevState: LessonFormState, formData: FormDat
 
     if (errorLesson) {
         return { message: "Не удалось создать урок", values }
+    }
+
+    revalidatePath('/manage-lessons')
+    return redirect('/manage-lessons')
+}
+
+export async function deleteLesson(formData: FormData) {
+    const supabase = await createServerClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return redirect('/')
+    }
+
+    const id = formData.get('id')
+
+    const { error: errorLesson } = await supabase
+        .from('lessons')
+        .delete()
+        .eq('id', id)
+        .eq('author_id', user.id)
+    
+    if (errorLesson) {
+        return
+    }
+
+    revalidatePath('/manage-lessons')
+    return redirect('/manage-lessons')
+}
+
+export async function updateLesson(prevState: LessonFormState, formData: FormData): Promise<LessonFormState> {
+    const supabase = await createServerClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return redirect('/')
+    }
+
+    const id = formData.get("id")
+    const title = formData.get("title") as string | null
+    const description = formData.get("description") as string | null
+    const content = formData.get("content") as string | null
+    const module_id = (formData.get("module_id") as string | null) || null
+    const published = formData.get("published") !== null
+    const youtube_url = formData.get("youtube_id") as string | null
+    const youtube_id = extractYoutubeId(youtube_url)
+
+    const values = {
+        title: title ?? undefined,
+        description: description ?? undefined,
+        content: content ?? undefined,
+        module_id: module_id ?? undefined,
+        published,
+        youtube_url: youtube_url ?? undefined
+    }
+
+    if (!title) {
+        return { message: "Имя урока не может быть пустое", values }
+    }
+
+    if (!description) {
+        return { message: "Описание не может быть пустым", values }
+    }
+
+    if (youtube_url && youtube_id === null) {
+        return { message: "Неправильный формат ссылки", values }
+    }
+
+    const { error: errorLesson } = await supabase
+        .from('lessons')
+        .update({ title, description, content, module_id, published, youtube_id })
+        .eq('id', id)
+        .eq('author_id', user.id)
+
+    if (errorLesson) {
+        return { message: "Не удалось обновить урок", values }
     }
 
     revalidatePath('/manage-lessons')
