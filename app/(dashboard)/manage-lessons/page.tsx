@@ -33,7 +33,7 @@ export default async function ManageLessons() {
 
     if (lessonErrors || moduleErrors) {
         return (
-            <div>This page had errors</div>
+            <div>{ lessonErrors?.message ?? moduleErrors?.message }</div>
         )
     }
 
@@ -41,7 +41,7 @@ export default async function ManageLessons() {
         <div className="space-y-6">
             <ul className="space-y-2">
                 { lessons.length === 0 && (
-                    <li>You did not create any lessons</li>
+                    <li>Вы пока не создавали уроки</li>
                 )}
 
                 { lessons.map(l => 
