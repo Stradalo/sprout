@@ -53,6 +53,10 @@ export default async function ManageTests() {
                             { t.published === false && (
                                 <p>Тест не опубликован</p>
                             )}
+                            <Link href={`/manage-tests/${t.id}/edit`}>
+                                Изменить тест
+                            </Link>
+                            <button type="submit">Удалить тест</button>
                         </Link>
                     </li>
                 )}
