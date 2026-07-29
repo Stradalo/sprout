@@ -1,5 +1,6 @@
 import LogoutButton from "./LogoutButton";
 import Links from "./Links";
+import Topbar from "./Topbar";
 import createServerClient from "@/lib/supabase/server"
 
 export default async function Layout({
@@ -21,12 +22,16 @@ export default async function Layout({
 
     return (
         <div className="flex min-h-screen">
-            <aside className="flex flex-col p-4 w-64 bg-slate-900">
+            <aside className="sidebar">
+                <span className="sidebar-brand">🌱 Sprout</span>
                 <Links role={role}/>
                 <LogoutButton />
             </aside>
 
-            <main className="flex-1 p-8">{children}</main>
+            <div className="flex flex-1 flex-col">
+                <Topbar email={user?.email ?? null} role={role} />
+                <main className="flex-1 p-8">{children}</main>
+            </div>
         </div>
     );
 }

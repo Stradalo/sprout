@@ -8,7 +8,7 @@ export default async function ManageLessons() {
     const supabase = await createServerClient()
 
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     const { data: profile } = await supabase
         .from('profiles')
         .select('role')
@@ -33,33 +33,47 @@ export default async function ManageLessons() {
 
     if (lessonErrors || moduleErrors) {
         return (
-            <div>{ lessonErrors?.message ?? moduleErrors?.message }</div>
+            <div className="empty-state">
+                <span className="empty-state-icon">⚠️</span>
+                <p className="empty-state-title">{ lessonErrors?.message ?? moduleErrors?.message }</p>
+            </div>
         )
     }
 
     return (
-        <div className="space-y-6">
-            <ul className="space-y-2">
-                { lessons.length === 0 && (
-                    <li>Вы пока не создавали уроки</li>
-                )}
+        <div className="space-y-8">
+            <h1 className="page-title">Manage Lessons</h1>
 
-                { lessons.map(l => 
-                    <li key={l.id}>
-                        { l.title }
-                        <Link href={`/manage-lessons/${l.id}/edit`}> Изменить урок </Link>
-                        <form className="space-y-2 flex flex-col" action={deleteLesson}>
-                            <input 
-                                type="hidden" 
-                                value={l.id}
-                                name="id"
-                            />
-                            <button type="submit">Удалить урок</button>
-                        </form>
-                    </li>
-                )}
-            </ul>
-            <LessonForm modules={modules}/>
+            {lessons.length === 0 ? (
+                <div className="empty-state">
+                    <span className="empty-state-icon">📖</span>
+                    <p className="empty-state-title">Вы пока не создавали уроки</p>
+                </div>
+            ) : (
+                <ul className="space-y-2">
+                    { lessons.map(l =>
+                        <li className="card flex items-center justify-between gap-4" key={l.id}>
+                            <span className="font-medium text-foreground">{ l.title }</span>
+                            <div className="flex items-center gap-2">
+                                <Link className="btn-ghost" href={`/manage-lessons/${l.id}/edit`}>Изменить урок</Link>
+                                <form action={deleteLesson}>
+                                    <input
+                                        type="hidden"
+                                        value={l.id}
+                                        name="id"
+                                    />
+                                    <button type="submit" className="btn-danger">Удалить урок</button>
+                                </form>
+                            </div>
+                        </li>
+                    )}
+                </ul>
+            )}
+
+            <div className="card">
+                <h2 className="section-title mb-4">Новый урок</h2>
+                <LessonForm modules={modules}/>
+            </div>
         </div>
     );
 }

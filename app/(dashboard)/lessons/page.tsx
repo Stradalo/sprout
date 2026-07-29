@@ -30,35 +30,40 @@ export default async function Lessons() {
     const flatLessons = grouped.get(null)
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8">
+            <h1 className="page-title">Уроки</h1>
             {flatLessons && flatLessons.length > 0 && (
-                <div className="space-y-2">
-                    <h2 className="text-xl font-semibold">Прочие уроки</h2>
+                <div className="space-y-3">
+                    <h2 className="section-title">Прочие уроки</h2>
+                    <div className="space-y-2">
                         {flatLessons.map(fl =>
-                            <Link 
+                            <Link
                                 href={`/lessons/${fl.id}`}
-                                className="block border rounded p-4" 
+                                className="card-link"
                                 key={ fl.id }
                             >
-                                <p>{ fl.title }</p>
-                                <p>{ fl.description }</p>
+                                <p className="font-medium text-foreground">{ fl.title }</p>
+                                <p className="text-sm text-muted">{ fl.description }</p>
                             </Link>
                         )}
+                    </div>
                 </div>
             )}
-            {modules.map(m => 
-                <div className="space-y-2" key={ m.id }>
-                    <h2 className="text-xl font-semibold">{ m.title }</h2>
-                    {grouped.get(m.id)?.map(g =>
-                        <Link 
-                            href={`/lessons/${g.id}`}
-                            className="block border rounded p-4" 
-                            key={ g.id }
-                        >
-                            <p>{ g.title }</p>
-                            <p>{ g.description }</p>
-                        </Link>
-                    )}
+            {modules.map(m =>
+                <div className="space-y-3" key={ m.id }>
+                    <h2 className="section-title">{ m.title }</h2>
+                    <div className="space-y-2">
+                        {grouped.get(m.id)?.map(g =>
+                            <Link
+                                href={`/lessons/${g.id}`}
+                                className="card-link"
+                                key={ g.id }
+                            >
+                                <p className="font-medium text-foreground">{ g.title }</p>
+                                <p className="text-sm text-muted">{ g.description }</p>
+                            </Link>
+                        )}
+                    </div>
                 </div>
             )}
         </div>

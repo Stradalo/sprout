@@ -14,7 +14,7 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
         .select('role')
         .eq('id', user?.id)
         .maybeSingle()
-    
+
     const role = profile?.role ?? 'student'
 
     if (role !== 'teacher') {
@@ -27,10 +27,10 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
         .eq('id', id)
         .eq('author_id', user?.id)
         .maybeSingle()
-    
+
     if (errorTest || test === null) {
         console.error("Test failed:", errorTest)
-        return <p>Возникла ошибка при загрузки теста или пользователь не создатель теста</p>
+        return <p className="form-error">Возникла ошибка при загрузки теста или пользователь не создатель теста</p>
     }
 
     const { data: questions, error: errorQuestion } = await supabase
@@ -40,7 +40,7 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
 
     if (errorQuestion) {
         console.error("Test failed:", errorQuestion)
-        return <p>Во время загрузки вопросов возникла ошибка</p>
+        return <p className="form-error">Во время загрузки вопросов возникла ошибка</p>
     }
 
     const questionIds = questions?.map(q => q.id) ?? []
@@ -52,7 +52,7 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
 
     if (errorOptions) {
         console.error("Test failed:", errorOptions)
-        return <p>Во время загрузки опций возникла ошибка</p>
+        return <p className="form-error">Во время загрузки опций возникла ошибка</p>
     }
 
     const grouped = new Map<string, Option[]>();
@@ -65,24 +65,27 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
 
     return (
         <div className="space-y-6">
-            <h2> { test.title } </h2>
-            <p> { test.description } </p>
-            { test.published === true && (
-                <p>Тест опубликован</p>
-            )}
-            { test.published === false && (
-                <p>Тест не опубликован</p>
-            )}
-            {questions?.map(q => 
-                <div className="space-y-2" key={ q.id }>
-                    <h2 className="text-xl font-semibold">{ q.question }</h2>
-                    <ul>
-                        {grouped.get(q.id)?.map(g => 
-                            <li key={ g.id }>{ g.option }</li>
-                        )}
-                    </ul>
+            <div>
+                <div className="flex items-center gap-3">
+                    <h1 className="page-title">{ test.title }</h1>
+                    <span className={test.published ? "badge-success" : "badge-muted"}>
+                        { test.published ? "Опубликован" : "Не опубликован" }
+                    </span>
                 </div>
-            )}
+                <p className="mt-2 text-muted">{ test.description }</p>
+            </div>
+            <div className="space-y-4">
+                {questions?.map(q =>
+                    <div className="card space-y-2" key={ q.id }>
+                        <h2 className="section-title">{ q.question }</h2>
+                        <ul className="space-y-1">
+                            {grouped.get(q.id)?.map(g =>
+                                <li className="text-sm text-muted" key={ g.id }>{ g.option }</li>
+                            )}
+                        </ul>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

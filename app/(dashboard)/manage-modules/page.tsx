@@ -8,7 +8,7 @@ export default async function ManageModules() {
     const supabase = await createServerClient()
 
     const { data: { user } } = await supabase.auth.getUser()
-    
+
     const { data: profile } = await supabase
         .from('profiles')
         .select('role')
@@ -28,33 +28,47 @@ export default async function ManageModules() {
 
     if (moduleErrors) {
         return (
-            <div>This page had errors</div>
+            <div className="empty-state">
+                <span className="empty-state-icon">⚠️</span>
+                <p className="empty-state-title">This page had errors</p>
+            </div>
         )
     }
 
     return (
-        <div className="space-y-6">
-            <ul className="space-y-2">
-                { modules.length === 0 && (
-                    <li>There are no modules</li>
-                )}
+        <div className="space-y-8">
+            <h1 className="page-title">Manage Modules</h1>
 
-                { modules.map(m => 
-                    <li key={m.id}>
-                        { m.title }
-                        <Link href={`/manage-modules/${m.id}/edit`}> Изменить модуль </Link>
-                        <form className="space-y-2 flex flex-col" action={deleteModule}>
-                            <input 
-                                type="hidden" 
-                                value={m.id}
-                                name="id"
-                            />
-                            <button type="submit">Удалить модуль</button>
-                        </form>
-                    </li>
-                )}
-            </ul>
-            <ModuleForm/>
+            {modules.length === 0 ? (
+                <div className="empty-state">
+                    <span className="empty-state-icon">📚</span>
+                    <p className="empty-state-title">There are no modules</p>
+                </div>
+            ) : (
+                <ul className="space-y-2">
+                    { modules.map(m =>
+                        <li className="card flex items-center justify-between gap-4" key={m.id}>
+                            <span className="font-medium text-foreground">{ m.title }</span>
+                            <div className="flex items-center gap-2">
+                                <Link className="btn-ghost" href={`/manage-modules/${m.id}/edit`}>Изменить модуль</Link>
+                                <form action={deleteModule}>
+                                    <input
+                                        type="hidden"
+                                        value={m.id}
+                                        name="id"
+                                    />
+                                    <button type="submit" className="btn-danger">Удалить модуль</button>
+                                </form>
+                            </div>
+                        </li>
+                    )}
+                </ul>
+            )}
+
+            <div className="card">
+                <h2 className="section-title mb-4">Новый модуль</h2>
+                <ModuleForm/>
+            </div>
         </div>
     );
 }
