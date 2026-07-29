@@ -4,7 +4,7 @@ export default async function Lesson({ params }: { params: Promise<{ id: string 
     const { id } = await params;
 
     const supabase = await createServerClient()
-    
+
     const { data: lesson, error} = await supabase
         .from('lessons')
         .select('*')
@@ -13,20 +13,27 @@ export default async function Lesson({ params }: { params: Promise<{ id: string 
 
     if (lesson === null || error) {
         return(
-            <div>Ничего не найдено</div>
+            <div className="empty-state">
+                <span className="empty-state-icon">🔍</span>
+                <p className="empty-state-title">Ничего не найдено</p>
+            </div>
         )
     }
 
     return (
-        <div>
-            <h2>{ lesson.title }</h2>
-            <p>{ lesson.description }</p>
+        <div className="space-y-6">
+            <div>
+                <h1 className="page-title">{ lesson.title }</h1>
+                <p className="mt-2 text-muted">{ lesson.description }</p>
+            </div>
             {lesson.youtube_id && (
-                <iframe 
-                    title={ lesson.title } 
-                    className="aspect-video w-full" 
-                    src={`https://www.youtube.com/embed/${lesson.youtube_id}`}
-                />
+                <div className="card overflow-hidden p-0">
+                    <iframe
+                        title={ lesson.title }
+                        className="aspect-video w-full"
+                        src={`https://www.youtube.com/embed/${lesson.youtube_id}`}
+                    />
+                </div>
             )}
         </div>
     );
