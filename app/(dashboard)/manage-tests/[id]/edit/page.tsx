@@ -8,7 +8,7 @@ export default async function EditTest({ params }: { params: Promise<{ id: strin
     const supabase = await createServerClient()
 
     const { data: { user } } = await supabase.auth.getUser()
-        
+
     const { data: profile } = await supabase
         .from('profiles')
         .select('role')
@@ -20,7 +20,7 @@ export default async function EditTest({ params }: { params: Promise<{ id: strin
     if (role !== 'teacher') {
         return redirect('/')
     }
-    
+
     const { data: test, error} = await supabase
         .from('tests')
         .select('*')
@@ -31,14 +31,19 @@ export default async function EditTest({ params }: { params: Promise<{ id: strin
     if (test === null || error) {
         console.error("Error while loading test:", error)
         return(
-            <p>Ничего не найдено</p>
+            <div className="empty-state">
+                <span className="empty-state-icon">🔍</span>
+                <p className="empty-state-title">Ничего не найдено</p>
+            </div>
         )
     }
 
     return (
-        <div>
-            <h2>Изменение теста</h2>
-            <UpdateTestForm test={test}/>
+        <div className="max-w-lg space-y-6">
+            <h1 className="page-title">Изменение теста</h1>
+            <div className="card">
+                <UpdateTestForm test={test}/>
+            </div>
         </div>
     );
 }

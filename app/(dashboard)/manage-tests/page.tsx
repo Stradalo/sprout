@@ -2,6 +2,7 @@ import createServerClient from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link";
 import TestForm from "./test-form";
+import { deleteTest } from "./action";
 
 export default async function ManageTests() {
     const supabase = await createServerClient()
@@ -34,34 +35,44 @@ export default async function ManageTests() {
     }
 
     return (
-        <div className="space-y-6">
-            <ul className="space-y-2">
-                { tests.length === 0 && (
-                    <li>Вы пока не создавали тесты</li>
-                )}
+        <div className="space-y-8">
+            <h1 className="page-title">Manage Tests</h1>
 
-                {tests.map(t => 
-                    <li key={ t.id }>
-                        <Link 
-                            href={`/manage-tests/${t.id}`}
-                            className="block border rounded p-4" 
-                        >
-                            <h2>{ t.title }</h2>
-                            { t.published === true && (
-                                <p>Тест опубликован</p>
-                            )}
-                            { t.published === false && (
-                                <p>Тест не опубликован</p>
-                            )}
-                            <Link href={`/manage-tests/${t.id}/edit`}>
-                                Изменить тест
-                            </Link>
-                            <button type="submit">Удалить тест</button>
-                        </Link>
-                    </li>
-                )}
-            </ul>
-            <TestForm />
+            {tests.length === 0 ? (
+                <div className="empty-state">
+                    <span className="empty-state-icon">🧪</span>
+                    <p className="empty-state-title">Вы пока не создавали тесты</p>
+                </div>
+            ) : (
+                <ul className="space-y-3">
+                    {tests.map(t =>
+                        <li className="card space-y-3" key={ t.id }>
+                            <div className="flex items-center justify-between gap-4">
+                                <Link href={`/manage-tests/${t.id}`} className="font-medium text-foreground hover:text-brand-700">
+                                    { t.title }
+                                </Link>
+                                <span className={t.published ? "badge-success" : "badge-muted"}>
+                                    { t.published ? "Опубликован" : "Не опубликован" }
+                                </span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <Link href={`/manage-tests/${t.id}/edit`} className="btn-ghost">
+                                    Изменить тест
+                                </Link>
+                                <form action={deleteTest}>
+                                    <input type="hidden" value={t.id} name="id" />
+                                    <button type="submit" className="btn-danger">Удалить тест</button>
+                                </form>
+                            </div>
+                        </li>
+                    )}
+                </ul>
+            )}
+
+            <div className="card">
+                <h2 className="section-title mb-4">Новый тест</h2>
+                <TestForm />
+            </div>
         </div>
     );
 }

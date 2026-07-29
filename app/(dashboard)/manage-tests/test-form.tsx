@@ -7,35 +7,44 @@ export default function TestForm() {
     const [state, formAction] = useActionState(createTest, { message: "" })
 
     return (
-        <form className="space-y-2 flex flex-col" action={formAction}>
-            <input 
-                className="border border-slate-300 rounded-md px-3 py-2 m-2 bg-black"
-                placeholder="Напишите имя теста"
-                type="text"
-                defaultValue={state.values?.title}
-                name="title"
-                required 
-            />
-            <input 
-                className="border border-slate-300 rounded-md px-3 py-2 m-2 bg-black"
-                placeholder="Напишите о тесте"
-                defaultValue={state.values?.description}
-                type="text" 
-                name="description" 
-            />
-            <input 
-                className="border border-slate-300 rounded-md px-3 py-2 m-2 bg-black"
-                type="checkbox"
-                defaultChecked={state.values?.published}
-                id="published"
-                name="published" 
-
-            />
-            <label htmlFor="published">Опубликовать?</label>
+        <form className="space-y-4" action={formAction}>
+            <div className="field">
+                <label className="label" htmlFor="title">Название</label>
+                <input
+                    id="title"
+                    className="input"
+                    placeholder="Напишите имя теста"
+                    type="text"
+                    defaultValue={state.values?.title}
+                    name="title"
+                    required
+                />
+            </div>
+            <div className="field">
+                <label className="label" htmlFor="description">Описание</label>
+                <input
+                    id="description"
+                    className="input"
+                    placeholder="Напишите о тесте"
+                    defaultValue={state.values?.description}
+                    type="text"
+                    name="description"
+                />
+            </div>
+            <div className="flex items-center gap-2">
+                <input
+                    className="checkbox"
+                    type="checkbox"
+                    defaultChecked={state.values?.published}
+                    id="published"
+                    name="published"
+                />
+                <label className="label" htmlFor="published">Опубликовать?</label>
+            </div>
             { state.message && (
-                <p> { state.message } </p>
+                <p className="form-error"> { state.message } </p>
             )}
-            <button type="submit">Создать тест</button>
+            <button type="submit" className="btn-primary">Создать тест</button>
         </form>
     );
 }
