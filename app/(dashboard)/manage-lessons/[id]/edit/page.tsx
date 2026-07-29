@@ -8,7 +8,7 @@ export default async function EditLesson({ params }: { params: Promise<{ id: str
     const supabase = await createServerClient()
 
     const { data: { user } } = await supabase.auth.getUser()
-        
+
     const { data: profile } = await supabase
         .from('profiles')
         .select('role')
@@ -20,7 +20,7 @@ export default async function EditLesson({ params }: { params: Promise<{ id: str
     if (role !== 'teacher') {
         return redirect('/')
     }
-    
+
     const { data: lesson, error} = await supabase
         .from('lessons')
         .select('*')
@@ -33,14 +33,19 @@ export default async function EditLesson({ params }: { params: Promise<{ id: str
 
     if (lesson === null || error || lesson.author_id !== user?.id || moduleErrors) {
         return(
-            <div>Ничего не найдено</div>
+            <div className="empty-state">
+                <span className="empty-state-icon">🔍</span>
+                <p className="empty-state-title">Ничего не найдено</p>
+            </div>
         )
     }
 
     return (
-        <div>
-            <h2>Изменение урока</h2>
-            <UpdateLessonForm lesson={lesson} modules={modules}/>
+        <div className="max-w-lg space-y-6">
+            <h1 className="page-title">Изменение урока</h1>
+            <div className="card">
+                <UpdateLessonForm lesson={lesson} modules={modules}/>
+            </div>
         </div>
     );
 }
