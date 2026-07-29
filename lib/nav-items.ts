@@ -15,4 +15,5 @@ export const navItems: NavItem[] = [
     { href: "/manage-lessons", label: "Manage Lessons", role: "teacher" },
     { href: "/manage-tests", label: "Manage Tests", role: "teacher" },
     { href: "/students-results", label: "Students Results", role: "teacher" },
+    { href: "/feedback", label: "Feedback", role: "all" },
 ];

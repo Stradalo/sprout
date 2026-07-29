@@ -13,7 +13,7 @@
   --brand-100: #dcfce7;
   --brand-200: #bbf7d0;
   --brand-500: #22c55e;
-  --brand-600: #16a34a;
+  --brand-600: #166534;
   --brand-700: #15803d;
 
   --danger-50: #fef2f2;
@@ -62,7 +62,7 @@
     --brand-100: #143420;
     --brand-200: #1d4b2c;
     --brand-500: #34d399;
-    --brand-600: #22c55e;
+    --brand-600: #166534;
     --brand-700: #16a34a;
 
     --danger-50: #2a1414;
@@ -162,7 +162,7 @@ body {
   }
 
   .sidebar {
-    @apply flex h-screen w-64 shrink-0 flex-col gap-6 border-r border-border bg-surface p-4;
+    @apply flex sticky top-0 h-screen w-64 shrink-0 flex-col gap-6 border-r border-border bg-surface p-4;
   }
 
   .sidebar-brand {
