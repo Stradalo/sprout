@@ -8,12 +8,12 @@ export type NavItem = {
 
 export const navItems: NavItem[] = [
     { href: "/", label: "Dashboard", role: "all" },
-    { href: "/lessons", label: "Lessons", role: "all" },
-    { href: "/tests", label: "Tests", role: "all" },
-    { href: "/my-results", label: "My Results", role: "all" },
-    { href: "/manage-modules", label: "Manage Modules", role: "teacher" },
-    { href: "/manage-lessons", label: "Manage Lessons", role: "teacher" },
-    { href: "/manage-tests", label: "Manage Tests", role: "teacher" },
-    { href: "/students-results", label: "Students Results", role: "teacher" },
-    { href: "/feedback", label: "Feedback", role: "all" },
+    { href: "/lessons", label: "Уроки", role: "all" },
+    { href: "/tests", label: "Тесты", role: "all" },
+    { href: "/my-results", label: "Мои Оценки", role: "all" },
+    { href: "/manage-modules", label: "Управление Модулями", role: "teacher" },
+    { href: "/manage-lessons", label: "Управление Уроками", role: "teacher" },
+    { href: "/manage-tests", label: "Управление Тестами", role: "teacher" },
+    { href: "/students-results", label: "Оценки Учеников", role: "teacher" },
+    { href: "/feedback", label: "Обратная Связь", role: "all" },
 ];

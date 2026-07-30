@@ -30,19 +30,17 @@ export default async function ManageModules() {
         return (
             <div className="empty-state">
                 <span className="empty-state-icon">⚠️</span>
-                <p className="empty-state-title">This page had errors</p>
+                <p className="empty-state-title">Возникла ошибка</p>
             </div>
         )
     }
 
     return (
         <div className="space-y-8">
-            <h1 className="page-title">Manage Modules</h1>
-
             {modules.length === 0 ? (
                 <div className="empty-state">
                     <span className="empty-state-icon">📚</span>
-                    <p className="empty-state-title">There are no modules</p>
+                    <p className="empty-state-title">Вы пока не создавали модули</p>
                 </div>
             ) : (
                 <ul className="space-y-2">
