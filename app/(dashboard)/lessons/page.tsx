@@ -18,7 +18,8 @@ export default async function Lessons() {
     const grouped = new Map<string | null, Lesson[]>();
 
     if (modulesError || lessonsError) {
-        return <pre>{modulesError?.message ?? lessonsError?.message}</pre>;
+        console.log("Modules or lesson error: ", modulesError?.message ?? lessonsError?.message)
+        return <div>Не удалось загрузить модули или уроки</div>;
     }
 
     for (const lesson of lessons) {
@@ -31,7 +32,6 @@ export default async function Lessons() {
 
     return (
         <div className="space-y-8">
-            <h1 className="page-title">Уроки</h1>
             {flatLessons && flatLessons.length > 0 && (
                 <div className="space-y-3">
                     <h2 className="section-title">Прочие уроки</h2>

@@ -31,13 +31,12 @@ export default async function ManageTests() {
         .eq("author_id", user.id)
 
     if (errorTests) {
-        return <pre>{ errorTests?.message }</pre>;
+        console.log("Test: ", errorTests?.message)
+        return <div>Не удалось загрузить тесты</div>;
     }
 
     return (
         <div className="space-y-8">
-            <h1 className="page-title">Manage Tests</h1>
-
             {tests.length === 0 ? (
                 <div className="empty-state">
                     <span className="empty-state-icon">🧪</span>

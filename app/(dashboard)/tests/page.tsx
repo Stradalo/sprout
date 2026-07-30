@@ -12,12 +12,12 @@ export default async function Tests() {
         .eq("published", true)
 
     if (errorTests) {
-        return <pre>{ errorTests?.message }</pre>;
+        console.log("Test: ", errorTests?.message)
+        return <div>Не удалось загрузить тетсы</div>;
     }
 
     return (
         <div className="space-y-6">
-            <h1 className="page-title">Тесты</h1>
             {tests.length === 0 && (
                 <div className="empty-state">
                     <span className="empty-state-icon">📝</span>
