@@ -2,7 +2,6 @@ import createServerClient from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link";
 import TestForm from "./test-form";
-import { deleteTest } from "./action";
 
 export default async function ManageTests() {
     const supabase = await createServerClient()
@@ -30,8 +29,8 @@ export default async function ManageTests() {
         .select('*')
         .eq("author_id", user.id)
 
-    if (errorTests) {
-        console.log("Test: ", errorTests?.message)
+    if (errorTests || tests === null) {
+        console.error("Test: ", errorTests?.message)
         return <div>Не удалось загрузить тесты</div>;
     }
 
@@ -53,15 +52,6 @@ export default async function ManageTests() {
                                 <span className={t.published ? "badge-success" : "badge-muted"}>
                                     { t.published ? "Опубликован" : "Не опубликован" }
                                 </span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                                <Link href={`/manage-tests/${t.id}/edit`} className="btn-ghost">
-                                    Изменить тест
-                                </Link>
-                                <form action={deleteTest}>
-                                    <input type="hidden" value={t.id} name="id" />
-                                    <button type="submit" className="btn-danger">Удалить тест</button>
-                                </form>
                             </div>
                         </li>
                     )}

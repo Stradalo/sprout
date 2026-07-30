@@ -18,7 +18,7 @@ export default async function Lessons() {
     const grouped = new Map<string | null, Lesson[]>();
 
     if (modulesError || lessonsError) {
-        console.log("Modules or lesson error: ", modulesError?.message ?? lessonsError?.message)
+        console.error("Modules or lesson error: ", modulesError?.message ?? lessonsError?.message)
         return <div>Не удалось загрузить модули или уроки</div>;
     }
 

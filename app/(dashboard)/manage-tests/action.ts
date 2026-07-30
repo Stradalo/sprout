@@ -63,14 +63,20 @@ export async function deleteTest(formData: FormData) {
         return
     }
 
-    const { error: errorTest } = await supabase
+    const { data: test, error: errorTest } = await supabase
         .from('tests')
         .delete()
         .eq('id', id)
         .eq('author_id', user.id)
+        .select('*')
     
     if (errorTest) {
         console.error("deleteTest failed:", errorTest)
+        return
+    }
+
+    if (test === null || test.length === 0) {
+        console.error("deleteTest failed: test not found or user is not the author")
         return
     }
     
@@ -110,14 +116,20 @@ export async function updateTest(prevState: TestFormState, formData: FormData): 
         return { message: "Имя теста не может быть пустое", values }
     }
 
-    const { error: errorTest } = await supabase
+    const { data: test, error: errorTest } = await supabase
         .from('tests')
         .update({ title, description, published })
         .eq('id', id)
         .eq('author_id', user.id)
+        .select('*')
 
     if (errorTest) {
         console.error("updateTest failed:", errorTest)
+        return { message: "Не удалось обновить тест", values }
+    }
+
+    if (test === null || test.length === 0) {
+        console.error("updateTest failed: test not found or user is not the author")
         return { message: "Не удалось обновить тест", values }
     }
 

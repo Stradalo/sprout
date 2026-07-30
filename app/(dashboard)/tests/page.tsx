@@ -12,7 +12,7 @@ export default async function Tests() {
         .eq("published", true)
 
     if (errorTests) {
-        console.log("Test: ", errorTests?.message)
+        console.error("Test: ", errorTests?.message)
         return <div>Не удалось загрузить тетсы</div>;
     }
 

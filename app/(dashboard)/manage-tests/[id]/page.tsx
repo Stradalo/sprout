@@ -1,6 +1,8 @@
 import createServerClient from "@/lib/supabase/server"
 import { Option } from "@/lib/types";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import { deleteTest } from "../action";
 
 export default async function Test({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -30,7 +32,7 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
 
     if (errorTest || test === null) {
         console.error("Test failed:", errorTest)
-        return <p className="form-error">Возникла ошибка при загрузки теста или пользователь не создатель теста</p>
+        return <p className="form-error">Возникла ошибка при загрузке теста</p>
     }
 
     const { data: questions, error: errorQuestion } = await supabase
@@ -39,7 +41,7 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
         .eq('test_id', id)
 
     if (errorQuestion) {
-        console.error("Test failed:", errorQuestion)
+        console.error("Question failed:", errorQuestion)
         return <p className="form-error">Во время загрузки вопросов возникла ошибка</p>
     }
 
@@ -51,7 +53,7 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
         .in('question_id', questionIds)
 
     if (errorOptions) {
-        console.error("Test failed:", errorOptions)
+        console.error("Option failed:", errorOptions)
         return <p className="form-error">Во время загрузки опций возникла ошибка</p>
     }
 
@@ -64,16 +66,14 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
     }
 
     return (
-        <div className="space-y-6">
-            <div>
-                <div className="flex items-center gap-3">
-                    <h1 className="page-title">{ test.title }</h1>
-                    <span className={test.published ? "badge-success" : "badge-muted"}>
-                        { test.published ? "Опубликован" : "Не опубликован" }
-                    </span>
-                </div>
-                <p className="mt-2 text-muted">{ test.description }</p>
+        <div className="card space-y-3">
+            <div className="flex items-center justify-between gap-4">
+                <h1 className="page-title">{ test.title }</h1>
+                <span className={test.published ? "badge-success" : "badge-muted"}>
+                    { test.published ? "Опубликован" : "Не опубликован" }
+                </span>
             </div>
+            <p className="mt-2 text-muted">{ test.description }</p>
             <div className="space-y-4">
                 {questions?.map(q =>
                     <div className="card space-y-2" key={ q.id }>
@@ -85,6 +85,15 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
                         </ul>
                     </div>
                 )}
+            </div>
+            <div className="flex items-center gap-3">
+                <Link href={`/manage-tests/${test.id}/edit`} className="btn-ghost">
+                    Изменить тест
+                </Link>
+                <form action={deleteTest}>
+                    <input type="hidden" value={test.id} name="id" />
+                    <button type="submit" className="btn-danger">Удалить тест</button>
+                </form>
             </div>
         </div>
     );
