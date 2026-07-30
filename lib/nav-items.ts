@@ -7,7 +7,7 @@ export type NavItem = {
 };
 
 export const navItems: NavItem[] = [
-    { href: "/", label: "Dashboard", role: "all" },
+    { href: "/", label: "Панель Управления", role: "all" },
     { href: "/lessons", label: "Уроки", role: "all" },
     { href: "/tests", label: "Тесты", role: "all" },
     { href: "/my-results", label: "Мои Оценки", role: "all" },

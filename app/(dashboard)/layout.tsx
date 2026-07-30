@@ -23,7 +23,7 @@ export default async function Layout({
     return (
         <div className="flex min-h-screen">
             <aside className="sidebar">
-                <span className="sidebar-brand">🌱 Sprout</span>
+                <span className="sidebar-brand"><img className="h-10 w-10" src="/logo.svg"/> Sprout</span>
                 <Links role={role}/>
                 <LogoutButton />
             </aside>
