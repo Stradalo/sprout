@@ -88,7 +88,7 @@ export default function UpdateLessonForm({ lesson, modules }: { lesson: Lesson, 
                     id="published"
                     type="checkbox"
                 />
-                <label className="label" htmlFor="published">Показать в уроках</label>
+                <label className="label" htmlFor="published">Опубликовать?</label>
             </div>
             { state.message && (
                 <p className="form-error"> { state.message } </p>

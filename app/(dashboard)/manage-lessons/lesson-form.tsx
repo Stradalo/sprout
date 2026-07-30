@@ -81,7 +81,7 @@ export function LessonForm({ modules }: { modules: Module[] }) {
                     id="published"
                     type="checkbox"
                 />
-                <label className="label" htmlFor="published">Показать в уроках</label>
+                <label className="label" htmlFor="published">Опубликовать?</label>
             </div>
             { state.message && (
                 <p className="form-error"> { state.message } </p>

@@ -42,8 +42,6 @@ export default async function ManageLessons() {
 
     return (
         <div className="space-y-8">
-            <h1 className="page-title">Manage Lessons</h1>
-
             {lessons.length === 0 ? (
                 <div className="empty-state">
                     <span className="empty-state-icon">📖</span>
@@ -52,8 +50,15 @@ export default async function ManageLessons() {
             ) : (
                 <ul className="space-y-2">
                     { lessons.map(l =>
-                        <li className="card flex items-center justify-between gap-4" key={l.id}>
-                            <span className="font-medium text-foreground">{ l.title }</span>
+                        <li className="card space-y-3" key={l.id}>
+                            <div className="flex items-center justify-between gap-4">
+                                <Link href={`/manage-lessons/${l.id}`} className="font-medium text-foreground hover:text-brand-700">
+                                    { l.title }
+                                </Link>
+                                <span className={l.published ? "badge-success" : "badge-muted"}>
+                                    { l.published ? "Опубликован" : "Не опубликован" }
+                                </span>
+                            </div>
                             <div className="flex items-center gap-2">
                                 <Link className="btn-ghost" href={`/manage-lessons/${l.id}/edit`}>Изменить урок</Link>
                                 <form action={deleteLesson}>
