@@ -93,3 +93,11 @@ export type QuestionFormState = {
         question_type?: string,
     }
 }
+
+export type OptionFormState = {
+    message: string,
+    success?: boolean,
+    values?: {
+        option?: string,
+    }
+}

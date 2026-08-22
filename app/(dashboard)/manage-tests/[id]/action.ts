@@ -1,6 +1,6 @@
 "use server"
 
-import { QuestionFormState } from "@/lib/types";
+import { OptionFormState, QuestionFormState } from "@/lib/types";
 import createServerClient from "@/lib/supabase/server"
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -188,4 +188,191 @@ export async function deleteQuestion(formData: FormData) {
     }
 
     revalidatePath(`/manage-tests/${test_id}`)
+}
+
+async function ownsQuestion(
+    supabase: Awaited<ReturnType<typeof createServerClient>>,
+    userId: string,
+    questionId: string
+) {
+    const { data: question, error: errorQuestion } = await supabase
+        .from('questions')
+        .select('id, test_id')
+        .eq('id', questionId)
+        .maybeSingle()
+
+    if (errorQuestion || question === null) {
+        console.error("ownsQuestion failed: question not found", errorQuestion)
+        return null
+    }
+
+    const { data: test, error: errorTest } = await supabase
+        .from('tests')
+        .select('id')
+        .eq('id', question.test_id)
+        .eq('author_id', userId)
+        .maybeSingle()
+
+    if (errorTest || test === null) {
+        console.error("ownsQuestion failed: test not found or user is not the author", errorTest)
+        return null
+    }
+
+    return question
+}
+
+export async function createOption(prevState: OptionFormState, formData: FormData): Promise<OptionFormState> {
+    const supabase = await createServerClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return redirect('/')
+    }
+
+    const question_id = formData.get("question_id") as string | null
+    const option = formData.get("option") as string | null
+
+    const values = {
+        option: option ?? undefined,
+    }
+
+    if (!question_id) {
+        return { message: "Id вопроса не может быть пустое", values }
+    }
+
+    if (!option) {
+        return { message: "Текст варианта не может быть пустой", values }
+    }
+
+    const question = await ownsQuestion(supabase, user.id, question_id)
+
+    if (question === null) {
+        return { message: "Не удалось создать вариант ответа", values }
+    }
+
+    const { data: last, error: errorLast } = await supabase
+        .from('options')
+        .select('sort_order')
+        .eq('question_id', question_id)
+        .order('sort_order', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+    if (errorLast) {
+        console.error("createOption failed:", errorLast)
+        return { message: "Не удалось создать вариант ответа", values }
+    }
+
+    const sort_order = (last?.sort_order ?? 0) + 1
+
+    const { error: errorOption } = await supabase
+        .from('options')
+        .insert({ question_id, option, sort_order })
+
+    if (errorOption) {
+        console.error("createOption failed:", errorOption)
+        return { message: "Не удалось создать вариант ответа", values }
+    }
+
+    revalidatePath(`/manage-tests/${question.test_id}`)
+    revalidatePath(`/manage-tests/${question.test_id}/questions/${question_id}/edit`)
+    return { message: "", success: true }
+}
+
+export async function updateOption(prevState: OptionFormState, formData: FormData): Promise<OptionFormState> {
+    const supabase = await createServerClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return redirect('/')
+    }
+
+    const id = formData.get("id") as string | null
+    const question_id = formData.get("question_id") as string | null
+    const option = formData.get("option") as string | null
+
+    const values = {
+        option: option ?? undefined,
+    }
+
+    if (!id || !question_id) {
+        return { message: "Id варианта не может быть пустое", values }
+    }
+
+    if (!option) {
+        return { message: "Текст варианта не может быть пустой", values }
+    }
+
+    const question = await ownsQuestion(supabase, user.id, question_id)
+
+    if (question === null) {
+        return { message: "Не удалось обновить вариант ответа", values }
+    }
+
+    const { data: updated, error: errorOption } = await supabase
+        .from('options')
+        .update({ option })
+        .eq('id', id)
+        .eq('question_id', question_id)
+        .select('id')
+
+    if (errorOption) {
+        console.error("updateOption failed:", errorOption)
+        return { message: "Не удалось обновить вариант ответа", values }
+    }
+
+    if (updated === null || updated.length === 0) {
+        console.error("updateOption failed: option not found")
+        return { message: "Не удалось обновить вариант ответа", values }
+    }
+
+    revalidatePath(`/manage-tests/${question.test_id}`)
+    revalidatePath(`/manage-tests/${question.test_id}/questions/${question_id}/edit`)
+    return { message: "", success: true }
+}
+
+export async function deleteOption(formData: FormData) {
+    const supabase = await createServerClient()
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return redirect('/')
+    }
+
+    const id = formData.get("id") as string | null
+    const question_id = formData.get("question_id") as string | null
+
+    if (!id || !question_id) {
+        console.error("deleteOption failed: id and question_id can not be null")
+        return
+    }
+
+    const question = await ownsQuestion(supabase, user.id, question_id)
+
+    if (question === null) {
+        return
+    }
+
+    const { data: deleted, error: errorOption } = await supabase
+        .from('options')
+        .delete()
+        .eq('id', id)
+        .eq('question_id', question_id)
+        .select('id')
+
+    if (errorOption) {
+        console.error("deleteOption failed:", errorOption)
+        return
+    }
+
+    if (deleted === null || deleted.length === 0) {
+        console.error("deleteOption failed: option not found")
+        return
+    }
+
+    revalidatePath(`/manage-tests/${question.test_id}`)
+    revalidatePath(`/manage-tests/${question.test_id}/questions/${question_id}/edit`)
 }
