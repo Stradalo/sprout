@@ -200,4 +200,9 @@ body {
   .auth-card {
     @apply w-full max-w-sm space-y-4 rounded-card border border-border bg-surface p-8 shadow-[var(--shadow-card)];
   }
+
+  .form-notice {
+    @apply text-sm text-brand-700;
+  }
+
 }
