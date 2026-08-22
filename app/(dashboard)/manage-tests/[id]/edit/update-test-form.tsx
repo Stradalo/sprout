@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { updateTest } from "../../action";
 import { Test } from "@/lib/types";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default function UpdateTestForm({ test }: { test: Test}) {
     const [state, formAction] = useActionState(updateTest, { message: "" })
@@ -50,7 +51,7 @@ export default function UpdateTestForm({ test }: { test: Test}) {
             { state.message && (
                 <p className="form-error"> { state.message } </p>
             )}
-            <button type="submit" className="btn-primary">Обновить тест</button>
+            <SubmitButton className="btn-primary" pendingLabel="Сохраняем…">Обновить тест</SubmitButton>
         </form>
     );
 }

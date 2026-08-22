@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { createModule } from "./action";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export function ModuleForm() {
     const [state, formAction] = useActionState(createModule, { message: "" })
@@ -34,7 +35,7 @@ export function ModuleForm() {
             { state.message && (
                 <p className="form-error"> { state.message } </p>
             )}
-            <button type="submit" className="btn-primary">Создать модуль</button>
+            <SubmitButton className="btn-primary" pendingLabel="Создаём…">Создать модуль</SubmitButton>
         </form>
     )
 }

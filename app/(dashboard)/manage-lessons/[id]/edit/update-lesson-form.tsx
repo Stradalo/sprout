@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { updateLesson } from "../../action";
 import { Lesson, Module } from "@/lib/types";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default function UpdateLessonForm({ lesson, modules }: { lesson: Lesson, modules: Module[] }) {
     const [state, formAction] = useActionState(updateLesson, { message: "" })
@@ -93,7 +94,7 @@ export default function UpdateLessonForm({ lesson, modules }: { lesson: Lesson, 
             { state.message && (
                 <p className="form-error"> { state.message } </p>
             )}
-            <button type="submit" className="btn-primary">Обновить урок</button>
+            <SubmitButton className="btn-primary" pendingLabel="Сохраняем…">Обновить урок</SubmitButton>
         </form>
     );
 }

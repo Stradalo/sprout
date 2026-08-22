@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import { Option, Question } from "@/lib/types";
 import { submitAttempt } from "./action";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default function TakeTestForm({ testId, questions, options }: { testId: string, questions: Question[], options: Option[] }) {
     const [state, formAction] = useActionState(submitAttempt, { message: "" })
@@ -51,7 +52,7 @@ export default function TakeTestForm({ testId, questions, options }: { testId: s
             { state.message && (
                 <p className="form-error"> { state.message } </p>
             )}
-            <button type="submit" className="btn-primary">Завершить тест</button>
+            <SubmitButton className="btn-primary" pendingLabel="Проверяем…">Завершить тест</SubmitButton>
         </form>
     )
 }

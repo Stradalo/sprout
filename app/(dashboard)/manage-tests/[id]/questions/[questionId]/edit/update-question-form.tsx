@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import { Question } from "@/lib/types";
 import { QUESTION_TYPE_LABELS } from "@/lib/utils";
 import { updateQuestion } from "../../../action";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default function UpdateQuestionForm({ question }: { question: Question }) {
     const [state, formAction] = useActionState(updateQuestion, { message: "" })
@@ -48,7 +49,7 @@ export default function UpdateQuestionForm({ question }: { question: Question })
             { state.message && (
                 <p className="form-error"> { state.message } </p>
             )}
-            <button type="submit" className="btn-primary">Обновить вопрос</button>
+            <SubmitButton className="btn-primary" pendingLabel="Сохраняем…">Обновить вопрос</SubmitButton>
         </form>
     );
 }

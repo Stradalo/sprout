@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useRef } from "react";
 import { createOption } from "../../../action";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default function OptionForm({ questionId }: { questionId: string }) {
     const [state, formAction] = useActionState(createOption, { message: "" })
@@ -30,7 +31,7 @@ export default function OptionForm({ questionId }: { questionId: string }) {
                     required
                     type="text"
                 />
-                <button type="submit" className="btn-primary">Добавить</button>
+                <SubmitButton className="btn-primary" pendingLabel="Добавляем…">Добавить</SubmitButton>
             </div>
             { state.message && (
                 <p className="form-error"> { state.message } </p>

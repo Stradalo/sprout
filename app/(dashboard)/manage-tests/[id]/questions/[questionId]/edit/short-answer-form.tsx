@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { setShortAnswer } from "../../../action";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default function ShortAnswerForm({ questionId, shortAnswer }: { questionId: string, shortAnswer: string }) {
     const [state, formAction] = useActionState(setShortAnswer, { message: "" })
@@ -23,7 +24,7 @@ export default function ShortAnswerForm({ questionId, shortAnswer }: { questionI
                     required
                     type="text"
                 />
-                <button type="submit" className="btn-primary">Сохранить</button>
+                <SubmitButton className="btn-primary" pendingLabel="Сохраняем…">Сохранить</SubmitButton>
             </div>
             { state.message && (
                 <p className="form-error"> { state.message } </p>

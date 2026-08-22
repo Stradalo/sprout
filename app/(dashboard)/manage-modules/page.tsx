@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { ModuleForm } from "./module-form";
 import { deleteModule } from "./action";
 import Link from "next/link";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default async function ManageModules() {
     const supabase = await createServerClient()
@@ -55,7 +56,7 @@ export default async function ManageModules() {
                                         value={m.id}
                                         name="id"
                                     />
-                                    <button type="submit" className="btn-danger">Удалить модуль</button>
+                                    <SubmitButton className="btn-danger" pendingLabel="Удаляем…">Удалить модуль</SubmitButton>
                                 </form>
                             </div>
                         </li>

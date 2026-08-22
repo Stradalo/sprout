@@ -3,6 +3,7 @@
 import { Module } from "@/lib/types";
 import { useActionState } from "react";
 import { createLesson } from "./action";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export function LessonForm({ modules }: { modules: Module[] }) {
     const [state, formAction] = useActionState(createLesson, { message: "" })
@@ -86,7 +87,7 @@ export function LessonForm({ modules }: { modules: Module[] }) {
             { state.message && (
                 <p className="form-error"> { state.message } </p>
             )}
-            <button type="submit" className="btn-primary">Создать урок</button>
+            <SubmitButton className="btn-primary" pendingLabel="Создаём…">Создать урок</SubmitButton>
         </form>
     )
 }

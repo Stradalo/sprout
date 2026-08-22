@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { LessonForm } from "./lesson-form";
 import { deleteLesson } from "./action";
 import Link from "next/link";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default async function ManageLessons() {
     const supabase = await createServerClient()
@@ -67,7 +68,7 @@ export default async function ManageLessons() {
                                         value={l.id}
                                         name="id"
                                     />
-                                    <button type="submit" className="btn-danger">Удалить урок</button>
+                                    <SubmitButton className="btn-danger" pendingLabel="Удаляем…">Удалить урок</SubmitButton>
                                 </form>
                             </div>
                         </li>

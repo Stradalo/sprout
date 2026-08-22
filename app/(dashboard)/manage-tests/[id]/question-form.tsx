@@ -3,6 +3,7 @@
 import { useActionState, useEffect, useRef } from "react";
 import { QUESTION_TYPE_LABELS } from "@/lib/utils";
 import { createQuestion } from "./action";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default function QuestionForm({ testId }: { testId: string }) {
     const [state, formAction] = useActionState(createQuestion, { message: "" })
@@ -49,7 +50,7 @@ export default function QuestionForm({ testId }: { testId: string }) {
             { state.message && (
                 <p className="form-error"> { state.message } </p>
             )}
-            <button type="submit" className="btn-primary">Создать вопрос</button>
+            <SubmitButton className="btn-primary" pendingLabel="Создаём…">Создать вопрос</SubmitButton>
         </form>
     )
 }

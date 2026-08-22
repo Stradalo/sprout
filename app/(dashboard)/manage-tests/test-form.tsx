@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 import { createTest } from "./action";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default function TestForm() {
     const [state, formAction] = useActionState(createTest, { message: "" })
@@ -44,7 +45,7 @@ export default function TestForm() {
             { state.message && (
                 <p className="form-error"> { state.message } </p>
             )}
-            <button type="submit" className="btn-primary">Создать тест</button>
+            <SubmitButton className="btn-primary" pendingLabel="Создаём…">Создать тест</SubmitButton>
         </form>
     );
 }
