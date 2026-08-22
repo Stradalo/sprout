@@ -1,10 +1,15 @@
 import createServerClient from "@/lib/supabase/server"
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function Tests() {
     const supabase = await createServerClient()
 
     const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+        return redirect('/')
+    }
 
     const { data: tests, error: errorTests } = await supabase
         .from('tests')

@@ -15,7 +15,7 @@ export default async function createBackClient() {
                 setAll(cookiesToSet) 
                 { 
                     try {
-                        for (let item of cookiesToSet) {
+                        for (const item of cookiesToSet) {
                             cookieStore.set(item.name, item.value, item.options)
                         }
                     } catch {}

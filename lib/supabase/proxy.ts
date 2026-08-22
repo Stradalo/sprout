@@ -14,13 +14,13 @@ export async function updateSession(request: NextRequest) {
                 }, 
                 setAll(cookiesToSet) 
                 { 
-                    for (let item of cookiesToSet) {
+                    for (const item of cookiesToSet) {
                         request.cookies.set(item.name, item.value)
                     }
 
                     supabaseResponse = NextResponse.next({ request })
 
-                    for (let item of cookiesToSet) {
+                    for (const item of cookiesToSet) {
                         supabaseResponse.cookies.set(item.name, item.value, item.options)
                     }
                 }
