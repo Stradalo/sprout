@@ -109,3 +109,25 @@ export type ShortAnswerFormState = {
         short_answer?: string,
     }
 }
+
+export type Attempt = {
+    id: string,
+    test_id: string,
+    student_id: string,
+    score: number,
+    total: number,
+    created_at: string,
+}
+
+export type AttemptAnswer = {
+    id: string,
+    attempt_id: string,
+    question_id: string,
+    option_ids: string[],
+    short_answer: string | null,
+    is_correct: boolean,
+}
+
+export type AttemptFormState = {
+    message: string,
+}
