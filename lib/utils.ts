@@ -17,3 +17,8 @@ export function extractYoutubeId(url: string | null) {
 
     return youtube.searchParams.get('v')
 }
+export const QUESTION_TYPE_LABELS: Record<string, string> = {
+    single: "Один вариант",
+    multiple: "Несколько вариантов",
+    short_answer: "Короткий ответ",
+}

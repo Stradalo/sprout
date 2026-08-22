@@ -84,3 +84,12 @@ export type CorrectAnswer = {
     option_id: string | null,
     short_answer: string | null,
 }
+
+export type QuestionFormState = {
+    message: string,
+    success?: boolean,
+    values?: {
+        question?: string,
+        question_type?: string,
+    }
+}
