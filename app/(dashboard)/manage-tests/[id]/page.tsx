@@ -4,8 +4,9 @@ import { QUESTION_TYPE_LABELS } from "@/lib/utils";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { deleteTest } from "../action";
-import { deleteQuestion } from "./action";
+import { deleteQuestion, moveQuestion } from "./action";
 import QuestionForm from "./question-form";
+import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
 export default async function Test({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -86,7 +87,7 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
                     </Link>
                     <form action={deleteTest}>
                         <input type="hidden" value={test.id} name="id" />
-                        <button type="submit" className="btn-danger">Удалить тест</button>
+                        <SubmitButton className="btn-danger" pendingLabel="Удаляем…">Удалить тест</SubmitButton>
                     </form>
                 </div>
             </div>
@@ -98,7 +99,7 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
                 </div>
             ) : (
                 <ul className="space-y-4">
-                    {questions.map(q =>
+                    {questions.map((q, index) =>
                         <li className="card space-y-3" key={ q.id }>
                             <div className="flex items-center justify-between gap-4">
                                 <h2 className="section-title">{ q.sort_order }. { q.question }</h2>
@@ -112,13 +113,29 @@ export default async function Test({ params }: { params: Promise<{ id: string }>
                                 )}
                             </ul>
                             <div className="flex items-center gap-3">
+                                {index > 0 && (
+                                    <form action={moveQuestion}>
+                                        <input type="hidden" value={q.id} name="id" />
+                                        <input type="hidden" value={test.id} name="test_id" />
+                                        <input type="hidden" value="up" name="direction" />
+                                        <SubmitButton className="btn-ghost" title="Переместить выше">↑</SubmitButton>
+                                    </form>
+                                )}
+                                {index < questions.length - 1 && (
+                                    <form action={moveQuestion}>
+                                        <input type="hidden" value={q.id} name="id" />
+                                        <input type="hidden" value={test.id} name="test_id" />
+                                        <input type="hidden" value="down" name="direction" />
+                                        <SubmitButton className="btn-ghost" title="Переместить ниже">↓</SubmitButton>
+                                    </form>
+                                )}
                                 <Link href={`/manage-tests/${test.id}/questions/${q.id}/edit`} className="btn-ghost">
                                     Изменить вопрос
                                 </Link>
                                 <form action={deleteQuestion}>
                                     <input type="hidden" value={q.id} name="id" />
                                     <input type="hidden" value={test.id} name="test_id" />
-                                    <button type="submit" className="btn-danger">Удалить вопрос</button>
+                                    <SubmitButton className="btn-danger" pendingLabel="Удаляем…">Удалить вопрос</SubmitButton>
                                 </form>
                             </div>
                         </li>

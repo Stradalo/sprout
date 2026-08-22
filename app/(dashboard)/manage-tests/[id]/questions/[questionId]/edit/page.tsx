@@ -101,8 +101,14 @@ export default async function EditQuestion({ params }: { params: Promise<{ id: s
                                 Тип вопроса — короткий ответ, поэтому эти варианты не используются. Их можно удалить.
                             </p>
                             <ul className="space-y-3">
-                                {options.map(o =>
-                                    <OptionRow option={o} isCorrect={correctOptionIds.has(o.id)} key={o.id} />
+                                {options.map((o, index) =>
+                                    <OptionRow
+                                        option={o}
+                                        isCorrect={correctOptionIds.has(o.id)}
+                                        isFirst={index === 0}
+                                        isLast={index === options.length - 1}
+                                        key={o.id}
+                                    />
                                 )}
                             </ul>
                         </>
@@ -122,8 +128,14 @@ export default async function EditQuestion({ params }: { params: Promise<{ id: s
                     ) : (
                         <>
                             <ul className="space-y-3">
-                                {options.map(o =>
-                                    <OptionRow option={o} isCorrect={correctOptionIds.has(o.id)} key={o.id} />
+                                {options.map((o, index) =>
+                                    <OptionRow
+                                        option={o}
+                                        isCorrect={correctOptionIds.has(o.id)}
+                                        isFirst={index === 0}
+                                        isLast={index === options.length - 1}
+                                        key={o.id}
+                                    />
                                 )}
                             </ul>
                             {correctOptionIds.size === 0 && (
