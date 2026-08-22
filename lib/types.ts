@@ -131,3 +131,18 @@ export type AttemptAnswer = {
 export type AttemptFormState = {
     message: string,
 }
+
+export type Feedback = {
+    id: string,
+    author_id: string,
+    body: string,
+    created_at: string,
+}
+
+export type FeedbackFormState = {
+    message: string,
+    success?: boolean,
+    values?: {
+        body?: string,
+    }
+}
