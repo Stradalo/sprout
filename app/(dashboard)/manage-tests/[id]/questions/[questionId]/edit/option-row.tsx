@@ -2,9 +2,9 @@
 
 import { useActionState } from "react";
 import { Option } from "@/lib/types";
-import { deleteOption, updateOption } from "../../../action";
+import { deleteOption, toggleCorrectOption, updateOption } from "../../../action";
 
-export default function OptionRow({ option }: { option: Option }) {
+export default function OptionRow({ option, isCorrect }: { option: Option, isCorrect: boolean }) {
     const [state, formAction] = useActionState(updateOption, { message: "" })
 
     return (
@@ -30,6 +30,17 @@ export default function OptionRow({ option }: { option: Option }) {
                         type="text"
                     />
                     <button type="submit" className="btn-ghost">Сохранить</button>
+                </form>
+                <form action={toggleCorrectOption}>
+                    <input type="hidden" value={option.id} name="option_id" />
+                    <input type="hidden" value={option.question_id} name="question_id" />
+                    <button
+                        type="submit"
+                        className={isCorrect ? "badge-success" : "btn-ghost"}
+                        title={isCorrect ? "Снять отметку" : "Отметить как правильный"}
+                    >
+                        { isCorrect ? "✓ Верный" : "Отметить" }
+                    </button>
                 </form>
                 <form action={deleteOption}>
                     <input type="hidden" value={option.id} name="id" />

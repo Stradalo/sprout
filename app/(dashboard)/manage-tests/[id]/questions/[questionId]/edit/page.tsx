@@ -4,6 +4,7 @@ import Link from "next/link"
 import UpdateQuestionForm from "./update-question-form"
 import OptionForm from "./option-form"
 import OptionRow from "./option-row"
+import ShortAnswerForm from "./short-answer-form"
 
 export default async function EditQuestion({ params }: { params: Promise<{ id: string, questionId: string }> }) {
     const { id, questionId } = await params
@@ -69,7 +70,19 @@ export default async function EditQuestion({ params }: { params: Promise<{ id: s
         return <p className="form-error">Во время загрузки вариантов ответа возникла ошибка</p>
     }
 
+    const { data: correctAnswers, error: errorCorrect } = await supabase
+        .from('correct_answers')
+        .select('*')
+        .eq('question_id', questionId)
+
+    if (errorCorrect) {
+        console.error("Error while loading correct answers:", errorCorrect)
+        return <p className="form-error">Во время загрузки правильных ответов возникла ошибка</p>
+    }
+
     const isShortAnswer = question.question_type === 'short_answer'
+    const correctOptionIds = new Set((correctAnswers ?? []).map(c => c.option_id).filter(Boolean))
+    const shortAnswer = (correctAnswers ?? []).find(c => c.short_answer !== null)?.short_answer ?? ""
 
     return (
         <div className="max-w-lg space-y-6">
@@ -78,34 +91,50 @@ export default async function EditQuestion({ params }: { params: Promise<{ id: s
                 <UpdateQuestionForm question={question} />
             </div>
 
-            <div className="card space-y-4">
-                <h2 className="section-title">Варианты ответа</h2>
-
-                {isShortAnswer && (
+            {isShortAnswer ? (
+                <div className="card space-y-4">
+                    <h2 className="section-title">Правильный ответ</h2>
+                    <ShortAnswerForm questionId={question.id} shortAnswer={shortAnswer} />
+                    {options !== null && options.length > 0 && (
+                        <>
+                            <p className="text-sm text-muted">
+                                Тип вопроса — короткий ответ, поэтому эти варианты не используются. Их можно удалить.
+                            </p>
+                            <ul className="space-y-3">
+                                {options.map(o =>
+                                    <OptionRow option={o} isCorrect={correctOptionIds.has(o.id)} key={o.id} />
+                                )}
+                            </ul>
+                        </>
+                    )}
+                </div>
+            ) : (
+                <div className="card space-y-4">
+                    <h2 className="section-title">Варианты ответа</h2>
                     <p className="text-sm text-muted">
-                        { options === null || options.length === 0
-                            ? "Для короткого ответа варианты не нужны."
-                            : "Тип вопроса — короткий ответ, поэтому эти варианты не используются. Их можно удалить." }
+                        { question.question_type === 'single'
+                            ? "Отметьте один правильный вариант."
+                            : "Отметьте все правильные варианты." }
                     </p>
-                )}
 
-                {options !== null && options.length > 0 && (
-                    <ul className="space-y-3">
-                        {options.map(o =>
-                            <OptionRow option={o} key={o.id} />
-                        )}
-                    </ul>
-                )}
+                    {options === null || options.length === 0 ? (
+                        <p className="text-sm text-muted">Пока нет ни одного варианта ответа.</p>
+                    ) : (
+                        <>
+                            <ul className="space-y-3">
+                                {options.map(o =>
+                                    <OptionRow option={o} isCorrect={correctOptionIds.has(o.id)} key={o.id} />
+                                )}
+                            </ul>
+                            {correctOptionIds.size === 0 && (
+                                <p className="form-error">Не отмечен ни один правильный вариант</p>
+                            )}
+                        </>
+                    )}
 
-                {!isShortAnswer && (
-                    <>
-                        {(options === null || options.length === 0) && (
-                            <p className="text-sm text-muted">Пока нет ни одного варианта ответа.</p>
-                        )}
-                        <OptionForm questionId={question.id} />
-                    </>
-                )}
-            </div>
+                    <OptionForm questionId={question.id} />
+                </div>
+            )}
 
             <Link href={`/manage-tests/${id}`} className="btn-ghost">
                 Вернуться к тесту

@@ -101,3 +101,11 @@ export type OptionFormState = {
         option?: string,
     }
 }
+
+export type ShortAnswerFormState = {
+    message: string,
+    success?: boolean,
+    values?: {
+        short_answer?: string,
+    }
+}
