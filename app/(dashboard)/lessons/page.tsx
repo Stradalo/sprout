@@ -1,6 +1,7 @@
 import createServerClient from "@/lib/supabase/server"
 import { Lesson } from "@/lib/types";
 import Link from "next/link";
+import LinkPending from "@/app/(dashboard)/LinkPending";
 
 export default async function Lessons() {
     const supabase = await createServerClient();
@@ -39,11 +40,14 @@ export default async function Lessons() {
                         {flatLessons.map(fl =>
                             <Link
                                 href={`/lessons/${fl.id}`}
-                                className="card-link"
+                                className="card-link flex items-center justify-between gap-3"
                                 key={ fl.id }
                             >
-                                <p className="font-medium text-foreground">{ fl.title }</p>
-                                <p className="text-sm text-muted">{ fl.description }</p>
+                                <div className="space-y-1">
+                                    <p className="font-medium text-foreground">{ fl.title }</p>
+                                    <p className="text-sm text-muted">{ fl.description }</p>
+                                </div>
+                                <LinkPending />
                             </Link>
                         )}
                     </div>
@@ -56,11 +60,14 @@ export default async function Lessons() {
                         {grouped.get(m.id)?.map(g =>
                             <Link
                                 href={`/lessons/${g.id}`}
-                                className="card-link"
+                                className="card-link flex items-center justify-between gap-3"
                                 key={ g.id }
                             >
-                                <p className="font-medium text-foreground">{ g.title }</p>
-                                <p className="text-sm text-muted">{ g.description }</p>
+                                <div className="space-y-1">
+                                    <p className="font-medium text-foreground">{ g.title }</p>
+                                    <p className="text-sm text-muted">{ g.description }</p>
+                                </div>
+                                <LinkPending />
                             </Link>
                         )}
                     </div>

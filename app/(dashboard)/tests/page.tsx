@@ -1,6 +1,7 @@
 import createServerClient from "@/lib/supabase/server"
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import LinkPending from "@/app/(dashboard)/LinkPending";
 
 export default async function Tests() {
     const supabase = await createServerClient()
@@ -33,10 +34,11 @@ export default async function Tests() {
                 {tests.map(t =>
                     <Link
                         href={`/tests/${t.id}`}
-                        className="card-link"
+                        className="card-link flex items-center justify-between gap-3"
                         key={ t.id }
                     >
                         <p className="font-medium text-foreground">{ t.title }</p>
+                        <LinkPending />
                     </Link>
                 )}
             </div>

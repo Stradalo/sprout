@@ -5,6 +5,7 @@ import { deleteLesson } from "./action";
 import Link from "next/link";
 import SubmitButton from "@/app/(dashboard)/SubmitButton";
 
+import LinkPending from "@/app/(dashboard)/LinkPending";
 export default async function ManageLessons() {
     const supabase = await createServerClient()
 
@@ -53,8 +54,9 @@ export default async function ManageLessons() {
                     { lessons.map(l =>
                         <li className="card space-y-3" key={l.id}>
                             <div className="flex items-center justify-between gap-4">
-                                <Link href={`/manage-lessons/${l.id}`} className="font-medium text-foreground hover:text-brand-700">
+                                <Link href={`/manage-lessons/${l.id}`} className="inline-flex items-center gap-2 font-medium text-foreground hover:text-brand-700">
                                     { l.title }
+                                    <LinkPending />
                                 </Link>
                                 <span className={l.published ? "badge-success" : "badge-muted"}>
                                     { l.published ? "Опубликован" : "Не опубликован" }

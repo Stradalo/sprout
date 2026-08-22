@@ -2,6 +2,7 @@ import createServerClient from "@/lib/supabase/server"
 import { redirect } from "next/navigation"
 import Link from "next/link";
 import TestForm from "./test-form";
+import LinkPending from "@/app/(dashboard)/LinkPending";
 
 export default async function ManageTests() {
     const supabase = await createServerClient()
@@ -46,8 +47,9 @@ export default async function ManageTests() {
                     {tests.map(t =>
                         <li className="card space-y-3" key={ t.id }>
                             <div className="flex items-center justify-between gap-4">
-                                <Link href={`/manage-tests/${t.id}`} className="font-medium text-foreground hover:text-brand-700">
+                                <Link href={`/manage-tests/${t.id}`} className="inline-flex items-center gap-2 font-medium text-foreground hover:text-brand-700">
                                     { t.title }
+                                    <LinkPending />
                                 </Link>
                                 <span className={t.published ? "badge-success" : "badge-muted"}>
                                     { t.published ? "Опубликован" : "Не опубликован" }
