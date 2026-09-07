@@ -1,4 +1,5 @@
 import createServerClient from "@/lib/supabase/server"
+import CommentThread from "@/app/(dashboard)/comments/comment-thread";
 
 export default async function Lesson({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -35,6 +36,8 @@ export default async function Lesson({ params }: { params: Promise<{ id: string 
                     />
                 </div>
             )}
+
+            <CommentThread target={{ type: "lesson", id: lesson.id }} title="Вопросы к уроку" />
         </div>
     );
 }

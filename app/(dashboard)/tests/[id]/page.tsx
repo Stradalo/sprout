@@ -1,6 +1,7 @@
 import createServerClient from "@/lib/supabase/server"
 import { redirect } from "next/navigation";
 import TakeTestForm from "./take-test-form";
+import CommentThread from "@/app/(dashboard)/comments/comment-thread";
 
 export default async function TakeTest({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
@@ -43,6 +44,24 @@ export default async function TakeTest({ params }: { params: Promise<{ id: strin
 
     const questionIds = questions?.map(q => q.id) ?? []
 
+    const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .maybeSingle()
+
+    // The thread is open once the student has taken the test, so nobody can
+    // read the answers out of it while still working on it. RLS enforces the
+    // same rule; this only decides whether to render the section.
+    const { data: attempts } = await supabase
+        .from('attempts')
+        .select('id')
+        .eq('test_id', id)
+        .eq('student_id', user.id)
+        .limit(1)
+
+    const canDiscuss = (profile?.role ?? 'student') === 'teacher' || (attempts?.length ?? 0) > 0
+
     const { data: options, error: errorOptions } = await supabase
         .from('options')
         .select('*')
@@ -68,6 +87,10 @@ export default async function TakeTest({ params }: { params: Promise<{ id: strin
                 </div>
             ) : (
                 <TakeTestForm testId={test.id} questions={questions} options={options ?? []} />
+            )}
+
+            {canDiscuss && (
+                <CommentThread target={{ type: "test", id: test.id }} title="Обсуждение теста" />
             )}
         </div>
     );

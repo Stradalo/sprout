@@ -1,5 +1,6 @@
 import createServerClient from "@/lib/supabase/server"
 import Link from "next/link";
+import CommentThread from "@/app/(dashboard)/comments/comment-thread";
 import { redirect } from "next/navigation";
 
 export default async function AttemptResult({ params }: { params: Promise<{ id: string, attemptId: string }> }) {
@@ -82,6 +83,8 @@ export default async function AttemptResult({ params }: { params: Promise<{ id: 
                     )}
                 </ul>
             )}
+
+            <CommentThread target={{ type: "attempt", id: attempt.id }} title="Обсуждение работы" />
 
             <div className="flex items-center gap-3">
                 <Link href="/tests" className="btn-ghost">К списку тестов</Link>

@@ -146,3 +146,29 @@ export type FeedbackFormState = {
         body?: string,
     }
 }
+
+export type Comment = {
+    id: string,
+    author_id: string,
+    lesson_id: string | null,
+    test_id: string | null,
+    attempt_id: string | null,
+    body: string,
+    file_path: string | null,
+    file_name: string | null,
+    file_size: number | null,
+    file_type: string | null,
+    created_at: string,
+}
+
+// A comment hangs off exactly one of three things, and the target decides both
+// the column it is stored in and the page that has to be revalidated.
+export type CommentTarget =
+    | { type: "lesson", id: string }
+    | { type: "test", id: string }
+    | { type: "attempt", id: string }
+
+export type CommentFormState = {
+    message: string,
+    success?: boolean,
+}
